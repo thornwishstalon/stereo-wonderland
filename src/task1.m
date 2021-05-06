@@ -1,5 +1,6 @@
 clc();
 clf();
+clear all;
 disp("TASK 1");
 
 right_image = imread('images/tsukuba_right.png');
@@ -10,7 +11,7 @@ max_disparity = 15;
 
 c = cost_volume( left_image, right_image, max_disparity, window_size);
 
-[min, ind] = min(c,[],3,'omitnan');
+[minc, ind] = min(c,[],3,'omitnan');
 
 imagesc(c(:,:,1))
 figure()
