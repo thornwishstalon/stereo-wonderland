@@ -1,4 +1,4 @@
-disp("hello world");
+disp("TASK 1");
 clear;
 close all;
 
@@ -8,11 +8,15 @@ left_image = imread('images/tsukuba_left.png');
 window_size = 5;
 max_disparity = 15;
 
-c = cost_volume(right_image, left_image, max_disparity, window_size);
+c = cost_volume( left_image, right_image, max_disparity, window_size);
 
-[min, ind] = min(c,[],3);
+[min, ind] = min(c,[],3,'omitnan');
 
-imshow(mat2gray(ind))
+imagesc(c(:,:,1))
+figure()
+imagesc(c(:,:,5))
+figure()
+imagesc(c(:,:,10))
 
-% TODO select the min costs first!
-% imshow(c)
+figure()
+imagesc(ind)
