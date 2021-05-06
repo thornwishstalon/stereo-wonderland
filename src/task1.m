@@ -1,6 +1,6 @@
+clc();
+clf();
 disp("TASK 1");
-clear;
-close all;
 
 right_image = imread('images/tsukuba_right.png');
 left_image = imread('images/tsukuba_left.png');
