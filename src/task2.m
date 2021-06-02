@@ -4,13 +4,13 @@ clear;
 close all;
 disp("TASK 2");
 
-right_image = double(imread('images/tsukuba_right.png')) ;
-left_image = double(imread('images/tsukuba_left.png'));
+right_image = imread('images/tsukuba_right.png') ;
+left_image = imread('images/tsukuba_left.png');
 
-window_size = 2;
+window_size =5 ;
 max_disparity = 15;
 
-[ cost_volume_left, cost_volume_right] = guided_cost_volume( left_image, right_image, max_disparity, window_size, [3 5], 0.1);
+[ cost_volume_left, cost_volume_right] = guided_cost_volume( left_image, right_image, max_disparity, window_size, 32, 0.5); % [5 5] is default
 [min_l, ind_l] = min(cost_volume_left,[] ,3,'omitnan');
 [min_r, ind_r] = min(cost_volume_right,[] ,3,'omitnan');
 
