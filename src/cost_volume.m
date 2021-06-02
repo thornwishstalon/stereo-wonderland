@@ -1,35 +1,51 @@
-function [cost_volume] = cost_volume(left_image, right_image, max_disparity, window_size)
-%COST_VOLUME calculate the cost_volume for a given pair of images, 
+function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_image, max_disparity, window_size)
+%COST_VOLUME FASTER calculate the cost_volume for a given pair of images, 
 %   Detailed explanation goes here
 
-[height, width, c] = size(right_image);
+    [height, width, c] = size(right_image);
+    disparities =  0:max_disparity ;
 
-disparities =  0:max_disparity ;
-
-cost_volume = NaN( height, width, max_disparity + 1 ) ;
-
-half_window_size = floor(window_size/2);
-
-for d = disparities
-    for y =  1:height 
-        for x =  1:width 
-            if (x-d) > 0 && (y-half_window_size) > 0 && (x-half_window_size) > 0 && (x-half_window_size-d) > 0 && (y+half_window_size) <= height && (x+half_window_size) <= width
-                
-                cost_volume(y,x,d+1) = calculate_cost(...
-                    left_image(y-half_window_size:y+half_window_size,x-half_window_size:x+half_window_size,:),...
-                    right_image(y-half_window_size:y+half_window_size,x-half_window_size-d:x+half_window_size-d,:)...
-                );                          
-            
-            end
-        end
-    end
+    % init cost volumes
+    cost_volume_right = ones( height, width, max_disparity + 1 ) * 3/255;
+    cost_volume_left = ones( height, width, max_disparity + 1 ) * 3/255;
+        
+    % calculate sums for windows per channel and per image:
+    tmp_r_r = colfilt(right_image(:,:,1), [window_size window_size],'sliding', @sum );
+    tmp_l_r = colfilt(left_image(:,:,1), [window_size window_size],'sliding', @sum );
     
+    tmp_r_g = colfilt(right_image(:,:,2), [window_size window_size],'sliding', @sum );
+    tmp_l_g = colfilt(left_image(:,:,2), [window_size window_size],'sliding', @sum );
+    
+    tmp_r_b = colfilt(right_image(:,:,3), [window_size window_size],'sliding', @sum );
+    tmp_l_b = colfilt(left_image(:,:,3), [window_size window_size],'sliding', @sum );
+    
+    avg_filter=fspecial('average',[window_size,window_size]);
+    
+    for d = disparities
+        
+        %left_volume
+         left =  ...
+            abs(tmp_l_r - shift_right(tmp_r_r, d) ) +  ... 
+            abs(tmp_l_g - shift_right(tmp_r_g, d) ) +  ... 
+            abs(tmp_l_b - shift_right(tmp_r_b, d) );                
+        cost_volume_left(:,:,d+1) = imfilter(left, avg_filter );
+        
+        %right_volume
+        right = ...
+            abs(tmp_r_r - shift_left(tmp_l_r, d) ) +  ...
+            abs(tmp_r_g - shift_left(tmp_l_g, d) ) +  ...
+            abs(tmp_r_b - shift_left(tmp_l_b, d) );   
+        cost_volume_right(:,:,d+1) = imfilter(right, avg_filter);
+        
+    end  
+    
+    
+end 
+
+function A = shift_left(B, step)
+    A = imtranslate(B, [-step 0],'FillValues',0);
 end
 
-
-end
- 
-
-function cost = calculate_cost(left_window, right_window)    
-    cost = sum(sum(sum(abs(left_window - right_window))));
+function A = shift_right(B, step)
+    A = imtranslate(B, [step 0],'FillValues',0);
 end
