@@ -1,4 +1,4 @@
-function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image, right_image, max_disparity, window_size)
+function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image, right_image, max_disparity, window_size, neighborhood_size, degree_of_smoothing)
 %COST_VOLUME FASTER calculate the cost_volume for a given pair of images, 
 %   Detailed explanation goes here
 
@@ -19,8 +19,11 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
     tmp_r_b = colfilt(right_image(:,:,3), [window_size window_size],'sliding', @sum );
     tmp_l_b = colfilt(left_image(:,:,3), [window_size window_size],'sliding', @sum );
     
-    left_g = rgb2gray(left_image);
-    right_g = rgb2gray(right_image);
+    left_g = double(rgb2gray(left_image));
+    left_grad = gradient(left_g);
+    right_g = double(rgb2gray(right_image));
+    right_grad = gradient(right_g);
+    
     for d = disparities
         
         %left_volume
@@ -29,7 +32,7 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
             abs(tmp_l_g - shift_right(tmp_r_g, d) ) +  ... 
             abs(tmp_l_b - shift_right(tmp_r_b, d) );      
         %apply smoothing
-        cost_volume_left(:,:,d+1) = imguidedfilter(left,left_g );
+        cost_volume_left(:,:,d+1) = imguidedfilter(double(left),left_g,'DegreeOfSmoothing',degree_of_smoothing, 'NeighborhoodSize', neighborhood_size);
         
         %right_volume
         right = ...
@@ -37,7 +40,7 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
             abs(tmp_r_g - shift_left(tmp_l_g, d) ) +  ...
             abs(tmp_r_b - shift_left(tmp_l_b, d) );   
         %apply smoothing
-        cost_volume_right(:,:,d+1) = imguidedfilter(right,right_g);
+        cost_volume_right(:,:,d+1) = imguidedfilter(double(right),right_g,'DegreeOfSmoothing',degree_of_smoothing, 'NeighborhoodSize', neighborhood_size);
         
     end  
     
