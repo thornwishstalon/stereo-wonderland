@@ -24,7 +24,9 @@ colormap('gray');
 colorbar;
 
 % consistency check
-[cleaned_left, cleaned_right]  = post_processing(ind_l, ind_r, 1);
+[cleaned_left, cleaned_right]  = find_occlusions(ind_l, ind_r, 1);
+%fill occlusions
+[filled_left, filled_right]  = fill_occlusions(cleaned_left, cleaned_right,  max_disparity, 1);
 
 % occlusion filling
 % TODO
