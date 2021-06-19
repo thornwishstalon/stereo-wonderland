@@ -6,8 +6,8 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
     disparities =  0:max_disparity ;
 
     % init cost volumes
-    cost_volume_right = ones( height, width, max_disparity + 1 ) * 3/255;
-    cost_volume_left = ones( height, width, max_disparity + 1 ) * 3/255;
+    cost_volume_right = double(ones( height, width, max_disparity + 1 )) * 2/255;
+    cost_volume_left = double(ones( height, width, max_disparity + 1 )) * 2/255 ;
         
     % calculate sums for windows per channel and per image:
     tmp_r_r = colfilt(right_image(:,:,1), [window_size window_size],'sliding', @sum );
@@ -31,6 +31,8 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
             abs(tmp_l_b - shift_right(tmp_r_b, d) );      
         %apply smoothing
         cost_volume_left(:,:,d+1) = imfilter(left,avg_filter );
+        % deal with border pixels (value = -1)
+        cost_volume_left(:,:,cost_volume_left(:,:,d+1)== -1) = NaN;
         
         %right_volume
         right = ...
@@ -39,16 +41,20 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
             abs(tmp_r_b - shift_left(tmp_l_b, d) );   
         %apply smoothing
         cost_volume_right(:,:,d+1) = imfilter(right,avg_filter);
-        
+        % deal with border pixels (value = -1)
+        cost_volume_right(:,:,cost_volume_right(:,:,d+1)== -1) = NaN;
+         
+    
+    
     end  
     
     
 end 
 
 function A = shift_left(B, step)
-    A = imtranslate(B, [-step 0],'FillValues',0);
+    A = imtranslate(B, [-step 0],'FillValues',2/255);
 end
 
 function A = shift_right(B, step)
-    A = imtranslate(B, [step 0],'FillValues',0);
+    A = imtranslate(B, [step 0],'FillValues',2/255);
 end

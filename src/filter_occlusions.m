@@ -3,9 +3,10 @@ function [cleaned_left, cleaned_right] = filter_occlusions(depth_left, depth_rig
 %   part 1 of our post processing, which is identifiying pixels that fail
 %   a left&right consistency check. That's done for both depth maps, set
 %   disp_flag to 1 to generate output images
-
-    
+   
     [height,width] = size(depth_left);   
+    
+    
     % generate row and colums subscripts which we will need for generate an
     % index for "dispariated" pixels
     row_subscripts = repmat((1:height)', [1 width]);
@@ -27,9 +28,10 @@ function [cleaned_left, cleaned_right] = filter_occlusions(depth_left, depth_rig
     diff = abs(depth_left - depth_right(indices));
     % set pixels that failed our consistency check to 
     cleaned_left(diff>=1) = NaN;
-    
+    cleaned_left(cleaned_left<2/255) = NaN;
     if disp_flag == 1
         figure, imagesc(cleaned_left);
+        title("left depth map filtered occlusions")
         colormap('gray');
         colorbar;
     end
@@ -51,10 +53,11 @@ function [cleaned_left, cleaned_right] = filter_occlusions(depth_left, depth_rig
     diff = abs(depth_right - depth_left(indices));
     % set pixels that failed our consistency check to 
     cleaned_right(diff>=1) = NaN;
-    
+    cleaned_right(cleaned_right<2/255) = NaN;
     
     if disp_flag == 1
         figure, imagesc(cleaned_right);
+        title("right depth map filtered occlusions")
         colormap('gray');
         colorbar;
     end

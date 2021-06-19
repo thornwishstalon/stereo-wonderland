@@ -19,7 +19,7 @@ function filled = fill_occ(cleaned, max_disp ,disp_flag)
     % from left to right:
     
     % prefill buffer with max_disp value
-    buffer= ones(1,width)*max_disp;
+    buffer= ones(1,height) * max_disp;
     result_left = cleaned;
 
     for i = 1:width
@@ -29,14 +29,15 @@ function filled = fill_occ(cleaned, max_disp ,disp_flag)
         result_left(:,i) = c;
     end
 
-    if disp_flag == 1
-        figure, imagesc(result_left);
+    if disp_flag == 11
+        figure, imagesc(result_left)
+        title("left depth map filled occlusions")
         colormap('gray');
         colorbar;
     end
     
      % from rigth to left:
-    buffer= ones(1,width)*max_disp;
+    buffer= ones(1,height)*max_disp;
     result_right = cleaned;
 
     for i = width:-1:1
@@ -46,7 +47,7 @@ function filled = fill_occ(cleaned, max_disp ,disp_flag)
         result_right(:,i) = c;
     end
 
-    if disp_flag == 1
+    if disp_flag == 11
         figure, imagesc(result_right);
         colormap('gray');
         colorbar;
@@ -57,6 +58,7 @@ function filled = fill_occ(cleaned, max_disp ,disp_flag)
     
     if disp_flag == 1
         figure, imagesc(filled);
+        title("right depth map filled occlusions")
         colormap('gray');
         colorbar;
     end

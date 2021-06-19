@@ -6,8 +6,8 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
     disparities =  0:max_disparity ;
 
     % init cost volumes
-    cost_volume_right = double(ones( height, width, max_disparity + 1 )) * 3/255;
-    cost_volume_left = double(ones( height, width, max_disparity + 1 )) * 3/255;
+    cost_volume_right = double(ones( height, width, max_disparity + 1 )) * 2/255;
+    cost_volume_left = double(ones( height, width, max_disparity + 1 )) * 2/255;
         
     % calculate sums for windows per channel and per image:
     tmp_r_r = colfilt(right_image(:,:,1), [window_size window_size],'sliding', @sum );
@@ -46,9 +46,9 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
 end 
 
 function A = shift_left(B, step)
-    A = imtranslate(B, [-step 0],'FillValues',NaN);
+    A = imtranslate(B, [-step 0],'FillValues',2/255);
 end
 
 function A = shift_right(B, step)
-    A = imtranslate(B, [step 0],'FillValues',NaN);
+    A = imtranslate(B, [step 0],'FillValues',2/255);
 end
