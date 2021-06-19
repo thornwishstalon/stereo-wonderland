@@ -18,10 +18,8 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
     
     tmp_r_b = colfilt(right_image(:,:,3), [window_size window_size],'sliding', @sum );
     tmp_l_b = colfilt(left_image(:,:,3), [window_size window_size],'sliding', @sum );
-    
-    left_g = double(rgb2gray(left_image));               
-    right_g = double(rgb2gray(right_image));    
-    
+     
+        
     for d = disparities
         
         %left_volume
@@ -39,7 +37,7 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
             abs(tmp_r_g - shift_left(tmp_l_g, d) ) +  ...
             abs(tmp_r_b - shift_left(tmp_l_b, d) );   
         
-        %apply smoothing        
+        %apply guided filter        
         cost_volume_right(:,:,d+1) = imguidedfilter(right,right_image,'DegreeOfSmoothing',degree_of_smoothing, 'NeighborhoodSize', neighborhood_size);        
         
     end  
@@ -48,9 +46,9 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
 end 
 
 function A = shift_left(B, step)
-    A = imtranslate(B, [-step 0],'FillValues',0);
+    A = imtranslate(B, [-step 0],'FillValues',NaN);
 end
 
 function A = shift_right(B, step)
-    A = imtranslate(B, [step 0],'FillValues',0);
+    A = imtranslate(B, [step 0],'FillValues',NaN);
 end
