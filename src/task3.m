@@ -29,7 +29,7 @@ if disp==1
 end
 
 % consistency check
-[cleaned_left, cleaned_right]  = find_occlusions(ind_l, ind_r, disp);
+[cleaned_left, cleaned_right]  = filter_occlusions(ind_l, ind_r, disp);
 % fill occlusions
 [filled_left, filled_right]  = fill_occlusions(cleaned_left, cleaned_right,  max_disparity, disp);
 % todo smoothing!

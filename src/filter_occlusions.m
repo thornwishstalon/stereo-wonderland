@@ -1,4 +1,4 @@
-function [cleaned_left, cleaned_right] = find_occlusions(depth_left, depth_right, disp_flag )
+function [cleaned_left, cleaned_right] = filter_occlusions(depth_left, depth_right, disp_flag )
 %POST_PROCESSING 
 %   part 1 of our post processing, which is identifiying pixels that fail
 %   a left&right consistency check. That's done for both depth maps, set
