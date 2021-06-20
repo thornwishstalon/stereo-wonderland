@@ -67,7 +67,7 @@ function error_score = score_set(path,max_disp,disp_out)
         
     % error score is average absoluto error over both left&right images
     error_score = mean([sum(abs(error_left),'all'), sum(abs(error_right),'all')],'all');
-    fprintf("test image: %s : error: %.2f\n\n", path, error_score)
+    fprintf("test image group: %s : abs avg error: %.2f\n\n", path, error_score)
 
 end
 

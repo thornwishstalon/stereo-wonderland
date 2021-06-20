@@ -5,8 +5,7 @@ function [filled_left, filled_right] = calc_depth(left_image,right_image, max_di
     
 % fixed parameters!!!!
 window_size = 3;
-% max_disparity = 15;
-filter_neighborhood = 33; 
+filter_neighborhood = 42; 
 filter_smoothing = 0.5;
 
 % calculate cost volume
