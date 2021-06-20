@@ -42,7 +42,7 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
         %apply smoothing
         cost_volume_right(:,:,d+1) = imfilter(right,avg_filter);
         % deal with border pixels (value = -1)
-        cost_volume_right(:,:,cost_volume_right(:,:,d+1)== -1) = NaN;
+        cost_volume_right(:,:,cost_volume_right(:,:,d+1)== -1) = 0;
          
     
     

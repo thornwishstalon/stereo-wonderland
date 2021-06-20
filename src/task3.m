@@ -7,10 +7,10 @@ disp("TASK 3- Postprocessing");
 right_image = imread('images/tsukuba_right.png') ;
 left_image = imread('images/tsukuba_left.png');
 
-window_size = 4;
+window_size = 3;
 max_disparity = 15;
 % [5 5] is default
-filter_neighborhood = 24; %32;
+filter_neighborhood = 33; %32;
 filter_smoothing = 0.5;
 disp = 1;
 %[ cost_volume_left, cost_volume_right] = cost_volume( left_image, right_image, max_disparity, window_size, [3 5] ); % [5 5] is default
