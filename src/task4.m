@@ -13,7 +13,7 @@ set_paths = ["images/2001_dataset/barn1/" "images/2001_dataset/barn2/"...
 scores=zeros(1, set_path_size);
 
 for i=1:set_path_size
-    scores(i)= score_set(set_paths(i),32,0);    
+    scores(i)= score_set(set_paths(i),32,[0 0 1]);    
 end
 
 function error_score = score_set(path,max_disp,disp_out)
@@ -32,7 +32,7 @@ function error_score = score_set(path,max_disp,disp_out)
     error_left = abs(left_disp - calc_left);
     error_right = abs(right_disp - calc_right);
     
-    if disp_out==1
+    if disp_out(1)==1
         figure, imagesc(calc_left);
         title("cals left")
         colormap('gray');
@@ -42,7 +42,8 @@ function error_score = score_set(path,max_disp,disp_out)
         title("cals right")
         colormap('gray');
         colorbar;
-        
+    end
+    if disp_out(2)==1    
         figure, imagesc(left_disp);
         title("groundtruth left")
         colormap('gray');
@@ -52,7 +53,8 @@ function error_score = score_set(path,max_disp,disp_out)
         title("groundtruth right")
         colormap('gray');
         colorbar;
-        
+    end
+    if disp_out(3)==1   
         
         figure, imagesc(error_left);
         title("errors left")        
