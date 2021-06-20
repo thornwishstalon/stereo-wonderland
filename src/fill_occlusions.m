@@ -61,7 +61,7 @@ function filled = fill_occ(cleaned, max_disp ,disp_flag)
     filled = min(result_left, result_right);    
     
     if disp_flag == 1
-        figure, imagesc(result_right);
+        figure, imagesc(filled);
         title("min filled occlusions")
         colormap('gray');
         colorbar;

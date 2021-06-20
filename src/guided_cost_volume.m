@@ -45,9 +45,9 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
 end 
 
 function A = shift_left(B, step)
-    A = double(imtranslate(B, [-step 0],'FillValues',1));    
+    A = double(imtranslate(B, [-step 0],'FillValues',0));    
 end
 
 function A = shift_right(B, step)
-    A = double(imtranslate(B, [step 0],'FillValues',1));    
+    A = double(imtranslate(B, [step 0],'FillValues',0));    
 end

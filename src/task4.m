@@ -13,7 +13,7 @@ set_paths = ["images/2001_dataset/barn1/" "images/2001_dataset/barn2/"...
 scores=zeros(1, set_path_size);
 
 for i=1:set_path_size
-    scores(i)= score_set(set_paths(i),32,1);    
+    scores(i)= score_set(set_paths(i),20,1);    
 end
 
 function error_score = score_set(path,max_disp,disp_out)

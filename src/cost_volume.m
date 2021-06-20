@@ -49,9 +49,9 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
 end 
 
 function A = shift_left(B, step)
-    A = imtranslate(B, [-step 0],'FillValues',float(2/255));
+    A = imtranslate(B, [-step 0],'FillValues',0);
 end
 
 function A = shift_right(B, step)
-    A = imtranslate(B, [step 0],'FillValues',float(2/255)));
+    A = imtranslate(B, [step 0],'FillValues',0);
 end
