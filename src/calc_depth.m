@@ -17,7 +17,7 @@ filter_smoothing = 0.5;
 % consistency check
 [cleaned_left, cleaned_right]  = filter_occlusions(ind_l, ind_r, 0);
 % fill occlusions
-[filled_left, filled_right]  = fill_occlusions(cleaned_left, cleaned_right,  max_disparity, 0);
+[filled_left, filled_right]  = fill_occlusions(cleaned_left, cleaned_right,  max_disparity, [0 0 ]);
 % smoothing with median filter
 filled_left = medfilt2(filled_left);
 filled_right = medfilt2(filled_right);

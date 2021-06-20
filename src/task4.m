@@ -13,7 +13,7 @@ set_paths = ["images/2001_dataset/barn1/" "images/2001_dataset/barn2/"...
 scores=zeros(1, set_path_size);
 
 for i=1:set_path_size
-    scores(i)= score_set(set_paths(i),32,[0 0 1]);    
+    scores(i)= score_set(set_paths(i),32,1);    
 end
 
 function error_score = score_set(path,max_disp,disp_out)
@@ -21,7 +21,8 @@ function error_score = score_set(path,max_disp,disp_out)
     left_image = imread(strcat(path, "im2.ppm")) ;
     right_image= imread(strcat(path , "im6.ppm")) ;
     
-    % groundtruth is scaled by factor 8!!! reverse to compare with 
+    % groundtruth is scaled by factor 8!!! reverse to compare with  our
+    % results
     left_disp = double(imread(strcat(path, "disp2.pgm"))) / 8 ;
     right_disp= double(imread(strcat(path, "disp6.pgm"))) / 8 ;
     % calculate our solution
@@ -33,35 +34,51 @@ function error_score = score_set(path,max_disp,disp_out)
     error_right = abs(right_disp - calc_right);
     
     if disp_out(1)==1
-        figure, imagesc(calc_left);
+        figure();
+        subplot(3,2,1)
+        imagesc(left_image);
+        title("input left")
+        
+        
+        subplot(3,2,2)
+        imagesc(right_image);
+        title("input right")
+        
+        subplot(3,2,3)
+        imagesc(calc_left);
         title("cals left")
         colormap('gray');
         colorbar;
         
-        figure, imagesc(calc_right);
+        subplot(3,2,4)
+        imagesc(calc_right);
         title("cals right")
         colormap('gray');
         colorbar;
-    end
-    if disp_out(2)==1    
-        figure, imagesc(left_disp);
+   
+        subplot(3,2,5)
+        imagesc(left_disp);
         title("groundtruth left")
         colormap('gray');
         colorbar;
         
-        figure, imagesc(right_disp);
+        subplot(3,2,6)
+        imagesc(right_disp);
         title("groundtruth right")
         colormap('gray');
         colorbar;
-    end
-    if disp_out(3)==1   
-        
-        figure, imagesc(error_left);
-        title("errors left")        
+
+        figure();
+        subplot(1,2,1)
+        imagesc(error_left);
+        title("errors left")   
+        colormap('default')
         colorbar;
 
-        figure, imagesc(error_right);
-        title("errors right")        
+        subplot(1,2,2)
+        imagesc(error_right);
+        title("errors right")            
+        colormap('default')
         colorbar;
     end
         

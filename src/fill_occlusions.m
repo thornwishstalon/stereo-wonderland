@@ -15,50 +15,54 @@ function filled = fill_occ(cleaned, max_disp ,disp_flag)
 %   returns the minimum of left-to-right and right-to-left candidate.
 
     [height, width] = size(cleaned);
-
+    cleaned(cleaned<=3/255) = NaN;
+    
     % from left to right:
     
     % prefill buffer with max_disp value
-    buffer= ones(1,height) * max_disp;
+    buffer= ones(height,1) * max_disp;
     result_left = cleaned;
 
     for i = 1:width
-        c = cleaned(:,i)    ;    
-        c(isnan(c)) = buffer(isnan(c));
+        c = cleaned(:,i)    ;            
+        c(isnan(c)) = buffer(isnan(c));        
         buffer(~isnan(c)) = c(~isnan(c));
         result_left(:,i) = c;
     end
 
-    if disp_flag == 11
+    if disp_flag(2) == 1
         figure, imagesc(result_left)
-        title("left depth map filled occlusions")
+        title("left to right filled occlusions")
         colormap('gray');
         colorbar;
     end
     
      % from rigth to left:
-    buffer= ones(1,height)*max_disp;
+    buffer= ones(height,1)*max_disp;
     result_right = cleaned;
 
-    for i = width:-1:1
-        c = cleaned(:,i)    ;    
-        c(isnan(c)) = buffer(isnan(c));
+    for i = width:-1:1       
+        c = cleaned(:,i)    ;
+        c(isnan(c)) = buffer(isnan(c));        
         buffer(~isnan(c)) = c(~isnan(c));
         result_right(:,i) = c;
     end
-
-    if disp_flag == 11
-        figure, imagesc(result_right);
+    
+    if disp_flag(2) == 1
+        figure, imagesc(result_right)
+        title("right to left filled occlusions")
         colormap('gray');
         colorbar;
     end
+
+    
     
     % take minimum disp values availabile -> prefer background 
-    filled = min(result_left, result_right);
+    filled = min(result_left, result_right);    
     
     if disp_flag == 1
-        figure, imagesc(filled);
-        title("right depth map filled occlusions")
+        figure, imagesc(result_right);
+        title("min filled occlusions")
         colormap('gray');
         colorbar;
     end

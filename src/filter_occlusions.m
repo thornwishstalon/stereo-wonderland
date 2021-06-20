@@ -6,7 +6,6 @@ function [cleaned_left, cleaned_right] = filter_occlusions(depth_left, depth_rig
    
     [height,width] = size(depth_left);   
     
-    
     % generate row and colums subscripts which we will need for generate an
     % index for "dispariated" pixels
     row_subscripts = repmat((1:height)', [1 width]);
@@ -21,14 +20,15 @@ function [cleaned_left, cleaned_right] = filter_occlusions(depth_left, depth_rig
     column_subscripts_l(column_subscripts_l<1) = 1;
     % build index
     indices = sub2ind([height,width],row_subscripts,column_subscripts_l);
+   
     
-    
-    cleaned_left = depth_left;
+    cleaned_left = depth_left;    
+    cleaned_left(cleaned_left==1) = NaN;
     % calculate depth difference
     diff = abs(depth_left - depth_right(indices));
     % set pixels that failed our consistency check to 
-    cleaned_left(diff>=1) = NaN;
-    cleaned_left(cleaned_left<2/255) = NaN;
+    cleaned_left(diff>=1) = NaN;    
+    
     if disp_flag == 1
         figure, imagesc(cleaned_left);
         title("left depth map filtered occlusions")
@@ -49,11 +49,13 @@ function [cleaned_left, cleaned_right] = filter_occlusions(depth_left, depth_rig
     indices = sub2ind([height,width],row_subscripts,column_subscripts_r);
 
     cleaned_right = depth_right;
+    % borders
+    cleaned_right(cleaned_right==1) = NaN;
     % calculate depth difference
     diff = abs(depth_right - depth_left(indices));
     % set pixels that failed our consistency check to 
     cleaned_right(diff>=1) = NaN;
-    cleaned_right(cleaned_right<2/255) = NaN;
+    
     
     if disp_flag == 1
         figure, imagesc(cleaned_right);

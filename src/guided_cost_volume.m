@@ -4,7 +4,7 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
 
     [height, width, c ] = size(right_image);
     disparities =  0:max_disparity ;
-
+    
     % init cost volumes
     cost_volume_right = double(ones( height, width, max_disparity + 1 )) * 2/255;
     cost_volume_left = double(ones( height, width, max_disparity + 1 )) * 2/255;
@@ -38,17 +38,16 @@ function [ cost_volume_left, cost_volume_right] = guided_cost_volume(left_image,
             abs(tmp_r_b - shift_left(tmp_l_b, d) );   
         
         %apply guided filter        
-        cost_volume_right(:,:,d+1) = imguidedfilter(right,right_image,'DegreeOfSmoothing',degree_of_smoothing, 'NeighborhoodSize', neighborhood_size);        
-        
+        cost_volume_right(:,:,d+1) = imguidedfilter(right,right_image,'DegreeOfSmoothing',degree_of_smoothing, 'NeighborhoodSize', neighborhood_size);                
     end  
     
     
 end 
 
 function A = shift_left(B, step)
-    A = imtranslate(B, [-step 0],'FillValues',2/255);
+    A = double(imtranslate(B, [-step 0],'FillValues',1));    
 end
 
 function A = shift_right(B, step)
-    A = imtranslate(B, [step 0],'FillValues',2/255);
+    A = double(imtranslate(B, [step 0],'FillValues',1));    
 end

@@ -31,8 +31,7 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
             abs(tmp_l_b - shift_right(tmp_r_b, d) );      
         %apply smoothing
         cost_volume_left(:,:,d+1) = imfilter(left,avg_filter );
-        % deal with border pixels (value = -1)
-        cost_volume_left(:,:,cost_volume_left(:,:,d+1)== -1) = NaN;
+        
         
         %right_volume
         right = ...
@@ -41,10 +40,8 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
             abs(tmp_r_b - shift_left(tmp_l_b, d) );   
         %apply smoothing
         cost_volume_right(:,:,d+1) = imfilter(right,avg_filter);
-        % deal with border pixels (value = -1)
-        cost_volume_right(:,:,cost_volume_right(:,:,d+1)== -1) = 0;
-         
-    
+        
+           
     
     end  
     
@@ -52,9 +49,9 @@ function [ cost_volume_left, cost_volume_right] = cost_volume(left_image, right_
 end 
 
 function A = shift_left(B, step)
-    A = imtranslate(B, [-step 0],'FillValues',2/255);
+    A = imtranslate(B, [-step 0],'FillValues',float(2/255));
 end
 
 function A = shift_right(B, step)
-    A = imtranslate(B, [step 0],'FillValues',2/255);
+    A = imtranslate(B, [step 0],'FillValues',float(2/255)));
 end

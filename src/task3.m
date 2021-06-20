@@ -9,8 +9,7 @@ left_image = imread('images/tsukuba_left.png');
 
 window_size = 3;
 max_disparity = 15;
-% [5 5] is default
-filter_neighborhood = 42; %32;
+filter_neighborhood = 42;
 filter_smoothing = 0.5;
 disp = [1 1 1 1];
 %[ cost_volume_left, cost_volume_right] = cost_volume( left_image, right_image, max_disparity, window_size, [3 5] ); % [5 5] is default
@@ -34,7 +33,7 @@ end
 % consistency check
 [cleaned_left, cleaned_right]  = filter_occlusions(ind_l, ind_r, disp(2));
 % fill occlusions
-[filled_left, filled_right]  = fill_occlusions(cleaned_left, cleaned_right,  max_disparity, disp(3));
+[filled_left, filled_right]  = fill_occlusions(cleaned_left, cleaned_right,  max_disparity, [disp(3) 1]);
 % smoothing with median filter
 filled_left = medfilt2(filled_left);
 filled_right = medfilt2(filled_right);
