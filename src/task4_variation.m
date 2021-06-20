@@ -26,7 +26,7 @@ function error_score = score_set(path,max_disp,disp_out)
     left_disp = double(imread(strcat(path, "disp2.pgm"))) / 8 ;
     right_disp= double(imread(strcat(path, "disp6.pgm"))) / 8 ;
     % calculate our solution
-    [calc_left, calc_right] = calc_depth(left_image, right_image, max_disp);
+    [calc_left, calc_right] = calc_depth_simple(left_image, right_image, max_disp);
     
     % calculate errors
     
@@ -52,7 +52,7 @@ function error_score = score_set(path,max_disp,disp_out)
         
         subplot(3,2,4)
         imagesc(calc_right);
-        title("calculated right")
+        title("calulated right")
         colormap('gray');
         colorbar;
    
